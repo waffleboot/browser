@@ -684,20 +684,30 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="676" height="788"/>
+                        <rect key="frame" x="0.0" y="0.0" width="738" height="788"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JIa-7e-owd">
-                                <rect key="frame" x="4" y="4" width="668" height="780"/>
+                                <rect key="frame" x="4" y="4" width="730" height="780"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cLF-nO-lzf" userLabel="bar">
-                                        <rect key="frame" x="0.0" y="758" width="668" height="22"/>
+                                        <rect key="frame" x="0.0" y="758" width="730" height="22"/>
                                         <subviews>
                                             <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dgq-CM-Gie" userLabel="buttons">
-                                                <rect key="frame" x="0.0" y="1" width="221" height="21"/>
+                                                <rect key="frame" x="0.0" y="1" width="283" height="21"/>
                                                 <subviews>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5vL-nu-6pk">
+                                                        <rect key="frame" x="-6" y="-7" width="77" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Back" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="y3q-Nu-zMD">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="back:" target="XfG-lQ-9wD" id="gA3-Ui-M1h"/>
+                                                        </connections>
+                                                    </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="73I-gk-NGD">
-                                                        <rect key="frame" x="-6" y="-7" width="83" height="32"/>
+                                                        <rect key="frame" x="63" y="-7" width="77" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Undo" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Djd-eE-lD8">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -707,7 +717,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aQK-7q-bdl">
-                                                        <rect key="frame" x="69" y="-7" width="83" height="32"/>
+                                                        <rect key="frame" x="132" y="-7" width="82" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9Fe-j9-kfk">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -717,7 +727,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aRt-w9-P9b">
-                                                        <rect key="frame" x="144" y="-7" width="83" height="32"/>
+                                                        <rect key="frame" x="206" y="-7" width="83" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Source" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2EJ-K8-1Bi">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -731,15 +741,17 @@
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
                                                     <integer value="1000"/>
+                                                    <integer value="1000"/>
                                                 </visibilityPriorities>
                                                 <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                     <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
                                             <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="hhl-PG-G60">
-                                                <rect key="frame" x="225" y="0.0" width="443" height="22"/>
+                                                <rect key="frame" x="287" y="0.0" width="443" height="22"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" focusRingType="none" drawsBackground="YES" id="dgS-Up-dTg">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -757,20 +769,20 @@
                                         </customSpacing>
                                     </stackView>
                                     <customView horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="Hfr-0R-CDp">
-                                        <rect key="frame" x="0.0" y="0.0" width="668" height="754"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="730" height="754"/>
                                         <subviews>
                                             <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GaX-IE-TyY">
-                                                <rect key="frame" x="0.0" y="0.0" width="668" height="754"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="730" height="754"/>
                                                 <clipView key="contentView" id="1Tq-Xi-ZAs">
-                                                    <rect key="frame" x="1" y="1" width="651" height="752"/>
+                                                    <rect key="frame" x="1" y="1" width="713" height="752"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textView importsGraphics="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="cvl-zA-Lfm">
-                                                            <rect key="frame" x="0.0" y="-1" width="651" height="752"/>
+                                                            <rect key="frame" x="0.0" y="-1" width="713" height="752"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <size key="minSize" width="651" height="752"/>
-                                                            <size key="maxSize" width="651" height="10000000"/>
+                                                            <size key="minSize" width="713" height="752"/>
+                                                            <size key="maxSize" width="713" height="10000000"/>
                                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         </textView>
                                                     </subviews>
@@ -781,7 +793,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="XZh-RT-Q4a">
-                                                    <rect key="frame" x="652" y="1" width="15" height="752"/>
+                                                    <rect key="frame" x="714" y="1" width="15" height="752"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                             </scrollView>

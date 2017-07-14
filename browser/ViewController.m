@@ -25,6 +25,7 @@
     self.sourceView.hidden = YES;
     self.viewModel = [[ViewModel alloc] initWithDelegate:self];
     [self.viewModel openLatest];
+    self.undoManager.levelsOfUndo = 10;
 }
 
 - (WKWebViewConfiguration *)webConfiguration {
@@ -82,6 +83,13 @@
 
 - (IBAction)reload:(id)sender {
     [self.viewModel reload:self.webView.URL.absoluteString];
+}
+
+- (IBAction)back:(id)sender {
+    WKBackForwardListItem *back = self.webView.backForwardList.backItem;
+    if (back) {
+        [self.viewModel open:back.URL.absoluteString];
+    }
 }
 
 - (IBAction)source:(id)sender {
