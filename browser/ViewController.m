@@ -20,6 +20,7 @@
     [self.view addSubview:self.webView];
     self.addressTextField.delegate = self;
     self.viewModel = [[ViewModel alloc] initWithDelegate:self];
+    [self.viewModel openLatest];
 }
 
 - (WKWebViewConfiguration *)webConfiguration {

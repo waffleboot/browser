@@ -7,6 +7,7 @@
 - (instancetype)initWithDelegate:(id<ViewModelDelegate>)delegate;
 - (void)open:(NSString *)address;
 - (void)save:(NSString *)html withAddress:(NSString *)address;
+- (void)openLatest;
 @end
 
 @protocol ViewModelDelegate <NSObject>

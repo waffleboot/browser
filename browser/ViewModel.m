@@ -29,6 +29,7 @@
     } else {
         [self.delegate open:address];
     }
+    [[NSUserDefaults standardUserDefaults] setObject:address forKey:@"latest"];
 }
 
 - (void)save:(NSString *)html withAddress:(NSString *)address {
@@ -49,6 +50,13 @@
     }
     if (![ctx save:&error]) {
         NSLog(@"%@", error);
+    }
+}
+
+- (void)openLatest {
+    NSString *latest = [[NSUserDefaults standardUserDefaults] stringForKey:@"latest"];
+    if (latest) {
+        [self open:latest];
     }
 }
 
