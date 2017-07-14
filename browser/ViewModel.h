@@ -8,6 +8,8 @@
 - (void)open:(NSString *)address;
 - (void)save:(NSString *)html withAddress:(NSString *)address;
 - (void)openLatest;
+- (void)reload:(NSString *)address;
+- (void)undo;
 @end
 
 @protocol ViewModelDelegate <NSObject>

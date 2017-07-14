@@ -72,4 +72,12 @@
     [self.viewModel save:message.body withAddress:self.webView.URL.absoluteString];
 }
 
+- (IBAction)undo:(id)sender {
+    [self.viewModel undo];
+}
+
+- (IBAction)reload:(id)sender {
+    [self.viewModel reload:self.webView.URL.absoluteString];
+}
+
 @end
