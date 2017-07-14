@@ -1,10 +1,12 @@
 
 #import "ViewController.h"
+#import "ViewModel.h"
 @import WebKit;
 
-@interface ViewController () <NSTextFieldDelegate,WKUIDelegate,WKScriptMessageHandler>
+@interface ViewController () <NSTextFieldDelegate,WKUIDelegate,WKScriptMessageHandler,ViewModelDelegate>
 @property (nonatomic) WKWebView *webView;
 @property (nonatomic) IBOutlet NSTextField *addressTextField;
+@property (nonatomic) ViewModel *viewModel;
 @end
 
 @implementation ViewController
@@ -17,7 +19,7 @@
     self.webView.UIDelegate = self;
     [self.view addSubview:self.webView];
     self.addressTextField.delegate = self;
-
+    self.viewModel = [[ViewModel alloc] initWithDelegate:self];
 }
 
 - (WKWebViewConfiguration *)webConfiguration {
@@ -40,17 +42,22 @@
 - (BOOL)control:(NSControl *)control
        textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     if (commandSelector == @selector(insertNewline:)) {
-        [self openAddress:textView.string];
+        [self.viewModel open:textView.string];
         return true;
     }
     return false;
 }
 
-- (void)openAddress:(NSString *)address {
+- (void)open:(NSString *)address {
     self.addressTextField.stringValue = address;
     NSURL *url = [NSURL URLWithString:address];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
+}
+
+- (void)openHTML:(NSString *)html withAddress:(NSString *)address {
+    self.addressTextField.stringValue = address;
+    [self.webView loadHTMLString:html baseURL:[NSURL URLWithString:address]];
 }
 
 - (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
@@ -61,7 +68,7 @@
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
-//    NSLog(@"%@", message.body);
+    [self.viewModel save:message.body withAddress:self.webView.URL.absoluteString];
 }
 
 @end

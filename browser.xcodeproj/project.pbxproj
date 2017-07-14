@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F58A60781F19117300283769 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = F58A60771F19117300283769 /* script.js */; };
+		F58A607B1F19141500283769 /* ViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F58A607A1F19141500283769 /* ViewModel.m */; };
 		F5E6D71C1F18F0A400CBAACC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6D71B1F18F0A400CBAACC /* AppDelegate.m */; };
 		F5E6D71F1F18F0A400CBAACC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6D71E1F18F0A400CBAACC /* main.m */; };
 		F5E6D7221F18F0A400CBAACC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6D7211F18F0A400CBAACC /* ViewController.m */; };
@@ -17,6 +18,8 @@
 
 /* Begin PBXFileReference section */
 		F58A60771F19117300283769 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
+		F58A60791F19141500283769 /* ViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewModel.h; sourceTree = "<group>"; };
+		F58A607A1F19141500283769 /* ViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewModel.m; sourceTree = "<group>"; };
 		F5E6D7171F18F0A300CBAACC /* browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5E6D71A1F18F0A400CBAACC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F5E6D71B1F18F0A400CBAACC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 				F5E6D7281F18F0A500CBAACC /* Info.plist */,
 				F5E6D71D1F18F0A400CBAACC /* Supporting Files */,
 				F58A60771F19117300283769 /* script.js */,
+				F58A60791F19141500283769 /* ViewModel.h */,
+				F58A607A1F19141500283769 /* ViewModel.m */,
 			);
 			path = browser;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			files = (
 				F5E6D7221F18F0A400CBAACC /* ViewController.m in Sources */,
 				F5E6D71F1F18F0A400CBAACC /* main.m in Sources */,
+				F58A607B1F19141500283769 /* ViewModel.m in Sources */,
 				F5E6D71C1F18F0A400CBAACC /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
