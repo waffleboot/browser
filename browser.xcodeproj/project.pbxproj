@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F58A60781F19117300283769 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = F58A60771F19117300283769 /* script.js */; };
 		F58A607B1F19141500283769 /* ViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F58A607A1F19141500283769 /* ViewModel.m */; };
+		F58A607E1F191F6C00283769 /* Browser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F58A607C1F191F6C00283769 /* Browser.xcdatamodeld */; };
 		F5E6D71C1F18F0A400CBAACC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6D71B1F18F0A400CBAACC /* AppDelegate.m */; };
 		F5E6D71F1F18F0A400CBAACC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6D71E1F18F0A400CBAACC /* main.m */; };
 		F5E6D7221F18F0A400CBAACC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6D7211F18F0A400CBAACC /* ViewController.m */; };
@@ -20,6 +21,7 @@
 		F58A60771F19117300283769 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
 		F58A60791F19141500283769 /* ViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewModel.h; sourceTree = "<group>"; };
 		F58A607A1F19141500283769 /* ViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewModel.m; sourceTree = "<group>"; };
+		F58A607D1F191F6C00283769 /* Browser.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Browser.xcdatamodel; sourceTree = "<group>"; };
 		F5E6D7171F18F0A300CBAACC /* browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5E6D71A1F18F0A400CBAACC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F5E6D71B1F18F0A400CBAACC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 		F5E6D7191F18F0A300CBAACC /* browser */ = {
 			isa = PBXGroup;
 			children = (
+				F58A60771F19117300283769 /* script.js */,
 				F5E6D71A1F18F0A400CBAACC /* AppDelegate.h */,
 				F5E6D71B1F18F0A400CBAACC /* AppDelegate.m */,
 				F5E6D7201F18F0A400CBAACC /* ViewController.h */,
@@ -69,9 +72,9 @@
 				F5E6D7251F18F0A500CBAACC /* Main.storyboard */,
 				F5E6D7281F18F0A500CBAACC /* Info.plist */,
 				F5E6D71D1F18F0A400CBAACC /* Supporting Files */,
-				F58A60771F19117300283769 /* script.js */,
 				F58A60791F19141500283769 /* ViewModel.h */,
 				F58A607A1F19141500283769 /* ViewModel.m */,
+				F58A607C1F191F6C00283769 /* Browser.xcdatamodeld */,
 			);
 			path = browser;
 			sourceTree = "<group>";
@@ -116,6 +119,7 @@
 					F5E6D7161F18F0A300CBAACC = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 6Y4L3S6MKX;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -156,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F58A607E1F191F6C00283769 /* Browser.xcdatamodeld in Sources */,
 				F5E6D7221F18F0A400CBAACC /* ViewController.m in Sources */,
 				F5E6D71F1F18F0A400CBAACC /* main.m in Sources */,
 				F58A607B1F19141500283769 /* ViewModel.m in Sources */,
@@ -276,6 +281,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = yangand.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -289,6 +295,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = yangand.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -314,6 +321,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F58A607C1F191F6C00283769 /* Browser.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F58A607D1F191F6C00283769 /* Browser.xcdatamodel */,
+			);
+			currentVersion = F58A607D1F191F6C00283769 /* Browser.xcdatamodel */;
+			path = Browser.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F5E6D70F1F18F0A300CBAACC /* Project object */;
 }

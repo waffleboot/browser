@@ -1,5 +1,7 @@
 
 #import "ViewModel.h"
+#import "AppDelegate.h"
+#import "HTML+CoreDataProperties.h"
 
 @interface ViewModel ()
 @property (nonatomic, weak) id<ViewModelDelegate> delegate;
@@ -15,24 +17,37 @@
 }
 
 - (void)open:(NSString *)address {
-    BOOL isDirectory;
-    NSString *path = @"/Users/yangand/Downloads/browser.html";
-    BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory];
-    if (fileExists && !isDirectory) {
-        NSError *error;
-        NSString *text = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-        if (text) {
-            [self.delegate openHTML:text withAddress:address];
-            return;
-        }
+    NSError *error;
+    AppDelegate *appDelegate = (AppDelegate *) [[NSApplication sharedApplication] delegate];
+    NSManagedObjectContext *ctx = appDelegate.viewContext;
+    NSFetchRequest *fetchRequest = [HTML fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", address];
+    NSArray<HTML *> *array = [ctx executeFetchRequest:fetchRequest error:&error];
+    if (array && array.count) {
+        HTML *obj = array.firstObject;
+        [self.delegate openHTML:obj.html withAddress:address];
+    } else {
+        [self.delegate open:address];
     }
-    [self.delegate open:address];
 }
 
 - (void)save:(NSString *)html withAddress:(NSString *)address {
     NSError *error;
-    NSString *path = @"/Users/yangand/Downloads/browser.html";
-    if (![html writeToFile:path atomically:NO encoding:NSUTF8StringEncoding error:&error]) {
+    AppDelegate *appDelegate = (AppDelegate *) [[NSApplication sharedApplication] delegate];
+    NSManagedObjectContext *ctx = appDelegate.viewContext;
+    NSFetchRequest *fetchRequest = [HTML fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", address];
+    NSArray<HTML *> *array = [ctx executeFetchRequest:fetchRequest error:&error];
+    if (array && array.count) {
+        HTML *obj = array.firstObject;
+        obj.html  = html;
+    } else {
+        HTML *obj = [[HTML alloc] initWithContext:ctx];
+        obj.html = html;
+        obj.address = address;
+        [ctx insertObject:obj];
+    }
+    if (![ctx save:&error]) {
         NSLog(@"%@", error);
     }
 }
