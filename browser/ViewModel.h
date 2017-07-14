@@ -10,6 +10,7 @@
 - (void)openLatest;
 - (void)reload:(NSString *)address;
 - (void)undo;
+- (NSString *)html:(NSString *)address;
 @end
 
 @protocol ViewModelDelegate <NSObject>

@@ -5,7 +5,10 @@
 
 @interface ViewController () <NSTextFieldDelegate,WKUIDelegate,WKScriptMessageHandler,ViewModelDelegate>
 @property (nonatomic) WKWebView *webView;
+@property (nonatomic) IBOutlet NSView *mainView;
 @property (nonatomic) IBOutlet NSTextField *addressTextField;
+@property (nonatomic) IBOutlet NSTextView *sourceTextView;
+@property (nonatomic) IBOutlet NSView *sourceView;
 @property (nonatomic) ViewModel *viewModel;
 @end
 
@@ -13,12 +16,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGRect frame = CGRectMake(0, 0, 480, 233);
-    self.webView = [[WKWebView alloc] initWithFrame:frame configuration:[self webConfiguration]];
-    self.webView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    self.webView.UIDelegate = self;
-    [self.view addSubview:self.webView];
     self.addressTextField.delegate = self;
+    self.webView = [[WKWebView alloc] initWithFrame:self.mainView.bounds configuration:[self webConfiguration]];
+    self.webView.UIDelegate = self;
+    self.webView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    self.webView.translatesAutoresizingMaskIntoConstraints = YES;
+    [self.mainView addSubview:self.webView];
+    self.sourceView.hidden = YES;
     self.viewModel = [[ViewModel alloc] initWithDelegate:self];
     [self.viewModel openLatest];
 }
@@ -78,6 +82,13 @@
 
 - (IBAction)reload:(id)sender {
     [self.viewModel reload:self.webView.URL.absoluteString];
+}
+
+- (IBAction)source:(id)sender {
+    BOOL webViewHidden = self.webView.hidden;
+    self.webView.hidden = !webViewHidden;
+    self.sourceView.hidden = webViewHidden;
+    self.sourceTextView.string = [self.viewModel html:self.addressTextField.stringValue];
 }
 
 @end

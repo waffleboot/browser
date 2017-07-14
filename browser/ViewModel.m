@@ -81,4 +81,14 @@
     [self.delegate open:address];
 }
 
+- (NSString *)html:(NSString *)address {
+    NSError *error;
+    AppDelegate *appDelegate = (AppDelegate *) [[NSApplication sharedApplication] delegate];
+    NSManagedObjectContext *ctx = appDelegate.viewContext;
+    NSFetchRequest *fetchRequest = [HTML fetchRequest];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", address];
+    NSArray<HTML *> *array = [ctx executeFetchRequest:fetchRequest error:&error];
+    return array && array.count ? array.firstObject.html : nil;
+}
+
 @end
