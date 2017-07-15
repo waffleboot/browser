@@ -694,10 +694,10 @@
                                         <rect key="frame" x="0.0" y="758" width="730" height="22"/>
                                         <subviews>
                                             <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dgq-CM-Gie" userLabel="buttons">
-                                                <rect key="frame" x="0.0" y="1" width="283" height="21"/>
+                                                <rect key="frame" x="0.0" y="1" width="296" height="21"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5vL-nu-6pk">
-                                                        <rect key="frame" x="-6" y="-7" width="77" height="32"/>
+                                                        <rect key="frame" x="-6" y="-7" width="83" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Back" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="y3q-Nu-zMD">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -707,7 +707,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="73I-gk-NGD">
-                                                        <rect key="frame" x="63" y="-7" width="77" height="32"/>
+                                                        <rect key="frame" x="69" y="-7" width="83" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Undo" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Djd-eE-lD8">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -717,7 +717,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aQK-7q-bdl">
-                                                        <rect key="frame" x="132" y="-7" width="82" height="32"/>
+                                                        <rect key="frame" x="144" y="-7" width="83" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9Fe-j9-kfk">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -727,7 +727,7 @@
                                                         </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aRt-w9-P9b">
-                                                        <rect key="frame" x="206" y="-7" width="83" height="32"/>
+                                                        <rect key="frame" x="219" y="-7" width="83" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Source" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2EJ-K8-1Bi">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -751,7 +751,7 @@
                                                 </customSpacing>
                                             </stackView>
                                             <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="hhl-PG-G60">
-                                                <rect key="frame" x="287" y="0.0" width="443" height="22"/>
+                                                <rect key="frame" x="300" y="0.0" width="430" height="22"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" focusRingType="none" drawsBackground="YES" id="dgS-Up-dTg">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -782,7 +782,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <size key="minSize" width="713" height="752"/>
-                                                            <size key="maxSize" width="713" height="10000000"/>
+                                                            <size key="maxSize" width="730" height="10000000"/>
                                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         </textView>
                                                     </subviews>
