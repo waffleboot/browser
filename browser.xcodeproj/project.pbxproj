@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F56F442F1F1982BC00E9B31B /* BrowserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F56F442E1F1982BC00E9B31B /* BrowserModel.m */; };
 		F58A60781F19117300283769 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = F58A60771F19117300283769 /* script.js */; };
 		F58A607B1F19141500283769 /* ViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F58A607A1F19141500283769 /* ViewModel.m */; };
 		F58A607E1F191F6C00283769 /* Browser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F58A607C1F191F6C00283769 /* Browser.xcdatamodeld */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F56F442D1F1982BC00E9B31B /* BrowserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowserModel.h; sourceTree = "<group>"; };
+		F56F442E1F1982BC00E9B31B /* BrowserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowserModel.m; sourceTree = "<group>"; };
 		F58A60771F19117300283769 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
 		F58A60791F19141500283769 /* ViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewModel.h; sourceTree = "<group>"; };
 		F58A607A1F19141500283769 /* ViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewModel.m; sourceTree = "<group>"; };
@@ -75,6 +78,8 @@
 				F58A60791F19141500283769 /* ViewModel.h */,
 				F58A607A1F19141500283769 /* ViewModel.m */,
 				F58A607C1F191F6C00283769 /* Browser.xcdatamodeld */,
+				F56F442D1F1982BC00E9B31B /* BrowserModel.h */,
+				F56F442E1F1982BC00E9B31B /* BrowserModel.m */,
 			);
 			path = browser;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 				F5E6D7221F18F0A400CBAACC /* ViewController.m in Sources */,
 				F5E6D71F1F18F0A400CBAACC /* main.m in Sources */,
 				F58A607B1F19141500283769 /* ViewModel.m in Sources */,
+				F56F442F1F1982BC00E9B31B /* BrowserModel.m in Sources */,
 				F5E6D71C1F18F0A400CBAACC /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -48,22 +48,20 @@
 - (BOOL)control:(NSControl *)control
        textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     if (commandSelector == @selector(insertNewline:)) {
-        [self.viewModel open:textView.string];
+        [self.viewModel openPageWithAddress:textView.string];
         return true;
     }
     return false;
 }
 
-- (void)open:(NSString *)address {
-    self.addressTextField.stringValue = address;
-    NSURL *url = [NSURL URLWithString:address];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:request];
+- (void)openPageWithURL:(NSURL *)url {
+    self.addressTextField.stringValue = url.absoluteString;
+    [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
-- (void)openHTML:(NSString *)html withAddress:(NSString *)address {
-    self.addressTextField.stringValue = address;
-    [self.webView loadHTMLString:html baseURL:[NSURL URLWithString:address]];
+- (void)openPageWithHTML:(NSString *)html baseURL:(NSURL *)baseUrl {
+    self.addressTextField.stringValue = baseUrl.absoluteString;
+    [self.webView loadHTMLString:html baseURL:baseUrl];
 }
 
 - (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
@@ -74,7 +72,7 @@
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
-    [self.viewModel save:message.body withAddress:self.webView.URL.absoluteString];
+    [self.viewModel savePageHTML:message.body withAddress:self.webView.URL.absoluteString];
 }
 
 - (IBAction)undo:(id)sender {
@@ -88,7 +86,7 @@
 - (IBAction)back:(id)sender {
     WKBackForwardListItem *back = self.webView.backForwardList.backItem;
     if (back) {
-        [self.viewModel open:back.URL.absoluteString];
+        [self.viewModel openPageWithAddress:back.URL.absoluteString];
     }
 }
 

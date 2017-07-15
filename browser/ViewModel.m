@@ -1,11 +1,14 @@
 
 #import "ViewModel.h"
-#import "AppDelegate.h"
-#import "HTML+CoreDataProperties.h"
+#import "BrowserModel.h"
 
 @interface ViewModel ()
 @property (nonatomic, weak) id<ViewModelDelegate> delegate;
 @property (nonatomic) NSUndoManager *undoManager;
+@end
+
+@interface NSURL (CanonicalURL)
+@property (nonatomic, readonly) NSURL *canonicalURL;
 @end
 
 @implementation ViewModel
@@ -14,81 +17,76 @@
     if (self = [super init]) {
         _delegate = delegate;
         _undoManager = [[NSUndoManager alloc] init];
+        _undoManager.levelsOfUndo = 10;
     }
     return self;
 }
 
-- (void)open:(NSString *)address {
-    NSError *error;
-    AppDelegate *appDelegate = (AppDelegate *) [[NSApplication sharedApplication] delegate];
-    NSManagedObjectContext *ctx = appDelegate.viewContext;
-    NSFetchRequest *fetchRequest = [HTML fetchRequest];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", address];
-    NSArray<HTML *> *array = [ctx executeFetchRequest:fetchRequest error:&error];
-    if (array && array.count) {
-        HTML *obj = array.firstObject;
-        [self.delegate openHTML:obj.html withAddress:address];
-    } else {
-        [self.delegate open:address];
-    }
-    [[NSUserDefaults standardUserDefaults] setObject:address forKey:@"latest"];
+- (void)openPageWithAddress:(NSString *)address {
+    [self openPageWithURL:[NSURL URLWithString:address]];
 }
 
-- (void)save:(NSString *)html withAddress:(NSString *)address {
-    [self save:html withAddress:address undo:NO];
+- (void)openPageWithURL:(NSURL *)url {
+    NSString *latestAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"latestAddress"];
+    NSURL *latestURL = [NSURL URLWithString:latestAddress];
+    if (![latestURL.canonicalURL isEqualTo:url.canonicalURL]) {
+        [self.undoManager removeAllActions];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:url.absoluteString forKey:@"latestAddress"];
+    NSString *html = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
+    if (html) {
+        [self.delegate openPageWithHTML:html baseURL:url];
+    } else {
+        [self.delegate openPageWithURL:url];
+    }
 }
 
-- (void)save:(NSString *)html withAddress:(NSString *)address undo:(BOOL)undo {
-    NSError *error;
-    AppDelegate *appDelegate = (AppDelegate *) [[NSApplication sharedApplication] delegate];
-    NSManagedObjectContext *ctx = appDelegate.viewContext;
-    NSFetchRequest *fetchRequest = [HTML fetchRequest];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", address];
-    NSArray<HTML *> *array = [ctx executeFetchRequest:fetchRequest error:&error];
-    if (array && array.count) {
-        HTML *obj = array.firstObject;
-        if (!undo) {
-            ViewModel *vm = (ViewModel *) [self.undoManager prepareWithInvocationTarget:self];
-            [vm save:obj.html withAddress:address undo:YES];
-        }
-        obj.html  = html;
-    } else {
-        HTML *obj = [[HTML alloc] initWithContext:ctx];
-        obj.html = html;
-        obj.address = address;
-        [ctx insertObject:obj];
+- (void)undoToHtml:(NSString *)html withAddress:(NSString *)address {
+    [self savePageHTML:html withAddress:address];
+    [self openPageWithAddress:address];
+}
+
+- (void)savePageHTML:(NSString *)html withAddress:(NSString *)address {
+    NSURL *url = [NSURL URLWithString:address];
+    NSString *oldHtml = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
+    if (oldHtml) {
+        ViewModel *vm = [self.undoManager prepareWithInvocationTarget:self];
+        [vm undoToHtml:oldHtml withAddress:address];
     }
-    if (![ctx save:&error]) {
-        NSLog(@"%@", error);
-    }
-    if (undo) {
-        [self open:address];
-    }
+    [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
 }
 
 - (void)openLatest {
-    NSString *latest = [[NSUserDefaults standardUserDefaults] stringForKey:@"latest"];
-    if (latest) {
-        [self open:latest];
+    NSString *latestAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"latestAddress"];
+    NSURL *latestURL = [NSURL URLWithString:latestAddress];
+    if (latestURL) {
+        [self openPageWithURL:latestURL];
     }
 }
 
 - (void)undo {
     [self.undoManager undo];
+    
 }
 
 - (void)reload:(NSString *)address {
-    [self.delegate open:address];
+    [self.delegate openPageWithURL:[NSURL URLWithString:address]];
 }
 
 - (NSString *)html:(NSString *)address {
-    NSError *error;
-    AppDelegate *appDelegate = (AppDelegate *) [[NSApplication sharedApplication] delegate];
-    NSManagedObjectContext *ctx = appDelegate.viewContext;
-    NSFetchRequest *fetchRequest = [HTML fetchRequest];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", address];
-    NSArray<HTML *> *array = [ctx executeFetchRequest:fetchRequest error:&error];
-    return array && array.count ? array.firstObject.html : nil;
+    NSURL *url = [NSURL URLWithString:address];
+    return [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
 }
 
+@end
+
+@implementation NSURL (CanonicalNSURL)
+- (NSURL *)canonicalURL {
+    NSURLComponents *components = [[NSURLComponents alloc] init];
+    components.scheme = self.scheme;
+    components.host = self.host;
+    components.port = self.port;
+    components.path = self.path;
+    return components.URL;
+}
 @end

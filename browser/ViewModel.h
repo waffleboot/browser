@@ -5,15 +5,15 @@
 
 @interface ViewModel : NSObject
 - (instancetype)initWithDelegate:(id<ViewModelDelegate>)delegate;
-- (void)open:(NSString *)address;
-- (void)save:(NSString *)html withAddress:(NSString *)address;
-- (void)openLatest;
+- (void)openPageWithAddress:(NSString *)address;
+- (void)savePageHTML:(NSString *)html withAddress:(NSString *)address;
 - (void)reload:(NSString *)address;
-- (void)undo;
+- (void)openLatest;
 - (NSString *)html:(NSString *)address;
+- (void)undo;
 @end
 
 @protocol ViewModelDelegate <NSObject>
-- (void)open:(NSString *)address;
-- (void)openHTML:(NSString *)html withAddress:(NSString *)address;
+- (void)openPageWithURL:(NSURL *)url;
+- (void)openPageWithHTML:(NSString *)html baseURL:(NSURL *)baseUrl;
 @end
