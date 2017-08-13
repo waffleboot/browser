@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F5123DF71F1A398300A38391 /* MyView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5123DF61F1A398300A38391 /* MyView.m */; };
 		F56F442F1F1982BC00E9B31B /* BrowserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F56F442E1F1982BC00E9B31B /* BrowserModel.m */; };
 		F58A60781F19117300283769 /* script.js in Resources */ = {isa = PBXBuildFile; fileRef = F58A60771F19117300283769 /* script.js */; };
 		F58A607B1F19141500283769 /* ViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F58A607A1F19141500283769 /* ViewModel.m */; };
@@ -20,8 +19,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F5123DF51F1A398300A38391 /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
-		F5123DF61F1A398300A38391 /* MyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyView.m; sourceTree = "<group>"; };
 		F56F442D1F1982BC00E9B31B /* BrowserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowserModel.h; sourceTree = "<group>"; };
 		F56F442E1F1982BC00E9B31B /* BrowserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowserModel.m; sourceTree = "<group>"; };
 		F58A60771F19117300283769 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
@@ -50,11 +47,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F50A5B601F1AE18B0051F752 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F5E6D70E1F18F0A300CBAACC = {
 			isa = PBXGroup;
 			children = (
 				F5E6D7191F18F0A300CBAACC /* browser */,
 				F5E6D7181F18F0A300CBAACC /* Products */,
+				F50A5B601F1AE18B0051F752 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -83,8 +88,6 @@
 				F58A607C1F191F6C00283769 /* Browser.xcdatamodeld */,
 				F56F442D1F1982BC00E9B31B /* BrowserModel.h */,
 				F56F442E1F1982BC00E9B31B /* BrowserModel.m */,
-				F5123DF51F1A398300A38391 /* MyView.h */,
-				F5123DF61F1A398300A38391 /* MyView.m */,
 			);
 			path = browser;
 			sourceTree = "<group>";
@@ -176,7 +179,6 @@
 				F58A607B1F19141500283769 /* ViewModel.m in Sources */,
 				F56F442F1F1982BC00E9B31B /* BrowserModel.m in Sources */,
 				F5E6D71C1F18F0A400CBAACC /* AppDelegate.m in Sources */,
-				F5123DF71F1A398300A38391 /* MyView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +293,7 @@
 				DEVELOPMENT_TEAM = 6Y4L3S6MKX;
 				INFOPLIST_FILE = browser/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = yangand.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -305,6 +308,7 @@
 				DEVELOPMENT_TEAM = 6Y4L3S6MKX;
 				INFOPLIST_FILE = browser/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LINK_WITH_STANDARD_LIBRARIES = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = yangand.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;

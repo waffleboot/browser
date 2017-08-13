@@ -3,19 +3,20 @@ console.log = function(message) {
     window.webkit.messageHandlers.host.postMessage({log:message})
 }
 
-// function handleClickEvent(event) {
+function handleClickEvent(event) {
+	// console.log('click')
 //     window.webkit.messageHandlers.app.postMessage(document.documentElement.outerHTML.toString())
 //     return true
-// 	const target = event.target
-// 	if (!target) {
-// 		return false
-// 	} else if (target.tagName == 'A') {
-// 		return false
-// 	}
-// 	target.parentNode.removeChild(target)
-// 	window.webkit.messageHandlers.app.postMessage(document.documentElement.outerHTML.toString())
-// 	return true;
-// }
+	const target = event.target
+	if (!target) {
+		return false
+	} else if (target.tagName == 'A') {
+		return false
+	}
+	target.parentNode.removeChild(target)
+	window.webkit.messageHandlers.host.postMessage({html:document.documentElement.outerHTML.toString()})
+	return true;
+}
 
 //Array.from(document.querySelectorAll('a')).forEach(function (el) {
 //                                                   el.addEventListener('click', function(event) {
@@ -30,21 +31,39 @@ console.log = function(message) {
 //                                                                       }, false)
 //                                                   })
 
-// Array.from(document.querySelectorAll('div')).forEach(function (el) {
-// 	console.log(el.outerHTML.toString())
-// 	el.addEventListener('click', function(event) {
-// 		console.log('click')
-// 		if (handleClickEvent(event)) event.preventDefault()
-// 	}, false)
-// })
+function addMyEventListener(el) {
+	el.addEventListener('click', function(event) {
+		if (handleClickEvent(event)) {
+			event.preventDefault()
+		}
+	}, false)	
+}
 
-// document.addEventListener('click',function (event) {
-// 	if (handleClickEvent(event)) {
-// 		event.preventDefault()
-// 	}
-// }, false)
+addMyEventListener(document)
+Array.from(document.querySelectorAll('div')).forEach(function (el) {
+	addMyEventListener(el)
+})
 
-function has(el,callback) {
+function textNodesUnder(el) {
+  	var node, all = [], walker = document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
+  	while (node = walker.nextNode()) {
+  		if (node.wholeText.trim().length && node.parentNode.tagName != 'SCRIPT') {
+  			all.push(node);
+  		}
+  	}
+  	return all;
+}
+
+allTextNodes = textNodesUnder(document.body);
+
+for (var el in allTextNodes) {
+	var span = document.createElement('SPAN')
+	var textNode = allTextNodes[el]
+	textNode.parentNode.replaceChild(span, textNode)
+	span.appendChild(textNode)
+}
+
+/*function has(el,callback) {
 	var children = Array.from(el.children || [])
 	for (var child in children) {
 		if (callback(child)) return true
@@ -74,4 +93,4 @@ click = function (x, y) {
 		console.log(low.outerHTML.toString())
 		low.parentNode.removeChild(low)
 	}
-}
+}*/

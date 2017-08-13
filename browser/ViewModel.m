@@ -27,12 +27,12 @@
 }
 
 - (void)openPageWithURL:(NSURL *)url {
-    NSString *latestAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"latestAddress"];
-    NSURL *latestURL = [NSURL URLWithString:latestAddress];
-    if (![latestURL.canonicalURL isEqualTo:url.canonicalURL]) {
+    NSString *recentAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"recentAddress"];
+    NSURL *recentURL = [NSURL URLWithString:recentAddress];
+    if (![recentURL.canonicalURL isEqualTo:url.canonicalURL]) {
         [self.undoManager removeAllActions];
     }
-    [[NSUserDefaults standardUserDefaults] setObject:url.absoluteString forKey:@"latestAddress"];
+    [[NSUserDefaults standardUserDefaults] setObject:url.absoluteString forKey:@"recentAddress"];
     NSString *html = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
     if (html) {
         [self.delegate openPageWithHTML:html baseURL:url];
@@ -57,11 +57,11 @@
     [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
 }
 
-- (void)openLatest {
-    NSString *latestAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"latestAddress"];
-    NSURL *latestURL = [NSURL URLWithString:latestAddress];
-    if (latestURL) {
-        [self openPageWithURL:latestURL];
+- (void)openRecentAddress {
+    NSString *recentAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"recentAddress"];
+    NSURL *recentURL = [NSURL URLWithString:recentAddress];
+    if (recentURL) {
+        [self openPageWithURL:recentURL];
     }
 }
 

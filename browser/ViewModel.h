@@ -8,12 +8,12 @@
 - (void)openPageWithAddress:(NSString *)address;
 - (void)savePageHTML:(NSString *)html withAddress:(NSString *)address;
 - (void)reload:(NSString *)address;
-- (void)openLatest;
+- (void)openRecentAddress;
 - (NSString *)html:(NSString *)address;
 - (void)undo;
 @end
 
 @protocol ViewModelDelegate <NSObject>
-- (void)openPageWithURL:(NSURL *)url;
 - (void)openPageWithHTML:(NSString *)html baseURL:(NSURL *)baseUrl;
+- (void)openPageWithURL:(NSURL *)url;
 @end

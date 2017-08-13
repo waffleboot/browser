@@ -1,13 +1,11 @@
 
 #import "ViewController.h"
 #import "ViewModel.h"
-#import "MyView.h"
 @import WebKit;
 
 @interface ViewController () <NSTextFieldDelegate,WKUIDelegate,WKScriptMessageHandler,ViewModelDelegate>
 @property (nonatomic) WKWebView *webView;
 @property (nonatomic) IBOutlet NSView *mainView;
-@property (nonatomic) IBOutlet NSView *overlayView;
 @property (nonatomic) IBOutlet NSTextField *addressTextField;
 @property (nonatomic) IBOutlet NSTextView *sourceTextView;
 @property (nonatomic) IBOutlet NSView *sourceView;
@@ -24,16 +22,10 @@
     self.webView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     self.webView.translatesAutoresizingMaskIntoConstraints = YES;
     [self.mainView addSubview:self.webView];
-    
-    self.overlayView = [[MyView alloc] initWithFrame:self.mainView.bounds andViewController:self];
-    self.overlayView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
-    self.overlayView.translatesAutoresizingMaskIntoConstraints = YES;
-    [self.mainView addSubview:self.overlayView positioned:NSWindowAbove relativeTo:self.webView];
-    
     self.sourceView.hidden = YES;
-    self.viewModel = [[ViewModel alloc] initWithDelegate:self];
-    [self.viewModel openLatest];
     self.undoManager.levelsOfUndo = 10;
+    self.viewModel = [[ViewModel alloc] initWithDelegate:self];
+    [self.viewModel openRecentAddress];
 }
 
 - (WKWebViewConfiguration *)webConfiguration {
@@ -74,14 +66,19 @@
     [self.webView loadHTMLString:html baseURL:baseUrl];
 }
 
-- (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+- (WKWebView *)webView:(WKWebView *)webView
+createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
+   forNavigationAction:(WKNavigationAction *)navigationAction
+        windowFeatures:(WKWindowFeatures *)windowFeatures {
+    // а вот здесь нужно проверять, есть ли
     NSURLRequest *request = navigationAction.request;
     self.addressTextField.stringValue = request.URL.absoluteString;
     [self.webView loadRequest:request];
     return nil;
 }
 
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message {
     NSDictionary *dict = (NSDictionary *) message.body;
     if ([dict valueForKey:@"log"]) {
         NSLog(@"%@", [dict valueForKey:@"log"]);
@@ -106,19 +103,14 @@
 }
 
 - (IBAction)source:(id)sender {
-    [self.webView evaluateJavaScript:@"click(10,10)" completionHandler:^(id x, NSError *error) {
-        if (error) NSLog(@"%@", error);
-    }];
-    
-    
-//    BOOL webViewHidden = self.webView.hidden;
-//    self.webView.hidden = !webViewHidden;
-//    self.sourceView.hidden = webViewHidden;
-//    self.sourceTextView.string = [self.viewModel html:self.addressTextField.stringValue];
-}
-
-- (void)click {
-    
+//    [self.webView evaluateJavaScript:@"document.documentElement.innerHTML = 'test'" completionHandler:^(id x, NSError *error) {
+//        if (error) NSLog(@"%@", error);
+//    }];
+    BOOL webViewHidden = self.webView.hidden;
+    self.webView.hidden = !webViewHidden;
+    self.sourceView.hidden = webViewHidden;
+    NSString *html = [self.viewModel html:self.addressTextField.stringValue];
+    self.sourceTextView.string = html ? html : @"";
 }
 
 @end
