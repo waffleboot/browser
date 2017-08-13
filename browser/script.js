@@ -3,35 +3,65 @@ console.log = function(message) {
     window.webkit.messageHandlers.host.postMessage({log:message})
 }
 
+function removeElement(el) {
+	if (el === document.body) return
+	var p = el.parentNode
+	p.removeChild(el)
+	var walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null, false)
+	var nodeList = []
+	var hasTextNodes = false
+	while (walker.nextNode()) {
+		var text = walker.currentNode.wholeText.trim()
+		if (text.length) {
+			hasTextNodes = true
+		} else {
+			nodeList.push(walker.currentNode)
+		}
+	}
+	nodeList.forEach(function (c) {
+		c.parentNode.removeChild(c)
+	})
+	if (!hasTextNodes) removeElement(p)
+}
+
 function handleClickEvent(event) {
-	// console.log('click')
-//     window.webkit.messageHandlers.app.postMessage(document.documentElement.outerHTML.toString())
-//     return true
 	const target = event.target
 	if (!target) {
 		return false
 	} else if (target.tagName == 'A') {
 		return false
 	}
-	target.parentNode.removeChild(target)
+	removeElement(target)
 	window.webkit.messageHandlers.host.postMessage({html:document.documentElement.outerHTML.toString()})
-	return true;
+	return true
 }
 
-//Array.from(document.querySelectorAll('a')).forEach(function (el) {
-//                                                   el.addEventListener('click', function(event) {
-//                                                                       event.preventDefault()
-//                                                                       handleClickEvent(event)
-//                                                                       }, false)
+// удалить все скрипты
+Array.from(document.scripts).forEach(function (s) {
+	s.parentNode.removeChild(s)
+})
 
-//Array.from(document.querySelectorAll('p')).forEach(function (el) {
-//                                                   el.addEventListener('click', function(event) {
-//                                                                       event.preventDefault()
-//                                                                       handleClickEvent(event)
-//                                                                       }, false)
-//                                                   })
+// обернуть все тексты в span
+function allTextNodes() {
+	var nodeList = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT,null,false)
+	while (walker.nextNode()) nodeList.push(walker.currentNode)
+  	return nodeList;
+}
 
-function addMyEventListener(el) {
+allTextNodes().forEach(function (el) {
+	if (el.wholeText.trim().length) {
+		if (el.parentNode.tagName != 'SPAN') {
+			var span = document.createElement('SPAN')
+			el.parentNode.replaceChild(span, el)
+			span.appendChild(el)
+		}
+	} else {
+		el.parentNode.removeChild(el)
+	}
+})
+
+// добавить click handler
+function addClickEventListener(el) {
 	el.addEventListener('click', function(event) {
 		if (handleClickEvent(event)) {
 			event.preventDefault()
@@ -39,58 +69,7 @@ function addMyEventListener(el) {
 	}, false)	
 }
 
-addMyEventListener(document)
-Array.from(document.querySelectorAll('div')).forEach(function (el) {
-	addMyEventListener(el)
-})
-
-function textNodesUnder(el) {
-  	var node, all = [], walker = document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false);
-  	while (node = walker.nextNode()) {
-  		if (node.wholeText.trim().length && node.parentNode.tagName != 'SCRIPT') {
-  			all.push(node);
-  		}
-  	}
-  	return all;
-}
-
-allTextNodes = textNodesUnder(document.body);
-
-for (var el in allTextNodes) {
-	var span = document.createElement('SPAN')
-	var textNode = allTextNodes[el]
-	textNode.parentNode.replaceChild(span, textNode)
-	span.appendChild(textNode)
-}
-
-/*function has(el,callback) {
-	var children = Array.from(el.children || [])
-	for (var child in children) {
-		if (callback(child)) return true
-		if (has(child,callback)) return true
-	}
-	return false
-}
-
-click = function (x, y) {
-	var divs = Array.from(document.querySelectorAll('div')).filter(function(el){
-		var rect = el.getBoundingClientRect()
-		return x - rect.left <= rect.width && y - rect.top <= rect.height
-	})
-	var low
-	var lowrect
-	divs.forEach(function(el){
-		var rect = el.getBoundingClientRect()
-		if (low && (rect.width > lowrect.width || rect.height > lowrect.height)) {
-			return
-		}
-		low = el
-		lowrect = rect
-	})
-	// var el = divs.values.next().value
-	if (low && low.parentNode) {
-		console.log(lowrect.top)
-		console.log(low.outerHTML.toString())
-		low.parentNode.removeChild(low)
-	}
-}*/
+addClickEventListener(document)
+// Array.from(document.querySelectorAll('div')).forEach(function (el) {
+// 	addClickEventListener(el)
+// })
