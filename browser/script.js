@@ -49,11 +49,12 @@ function allTextNodes() {
 }
 
 allTextNodes().forEach(function (el) {
-	if (el.wholeText.trim().length) {
+	var text = el.wholeText.trim()
+	if (text.length) {
 		if (el.parentNode.tagName != 'SPAN') {
 			var span = document.createElement('SPAN')
 			el.parentNode.replaceChild(span, el)
-			span.appendChild(el)
+			span.appendChild(document.createTextNode(text))
 		}
 	} else {
 		el.parentNode.removeChild(el)
