@@ -113,4 +113,12 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     self.sourceTextView.string = html ? html : @"";
 }
 
+- (IBAction)links:(NSButton *)linksCheckBox {
+    NSString *value  = linksCheckBox.state == NSOnState ? @"true" : @"false";
+    NSString *script = [NSString stringWithFormat:@"window.removeLinks = %@", value];
+    [self.webView evaluateJavaScript:script completionHandler:^(id result, NSError* error) {
+        // nothing to do
+    }];
+}
+
 @end

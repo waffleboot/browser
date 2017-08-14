@@ -1,4 +1,6 @@
 
+var removeLinks = false;
+
 console.log = function(message) {
     window.webkit.messageHandlers.host.postMessage({log:message})
 }
@@ -35,7 +37,7 @@ function handleClickEvent(event) {
 		return false
 	}
 	const anchorForTarget = findClosest(target, 'A')
-	if (anchorForTarget) {
+	if (anchorForTarget && !removeLinks) {
 		return false
 	}
 	removeElement(target)
