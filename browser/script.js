@@ -48,6 +48,11 @@ Array.from(document.scripts).forEach(function (s) {
 	s.parentNode.removeChild(s)
 })
 
+// удалить meta
+Array.from(document.querySelectorAll('meta')).forEach(function (el) {
+	el.parentNode.removeChild(el)
+})
+
 // обернуть все тексты в span
 function allTextNodes() {
 	var nodeList = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT,null,false)
