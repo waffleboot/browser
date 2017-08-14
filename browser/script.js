@@ -24,11 +24,18 @@ function removeElement(el) {
 	if (!hasTextNodes) removeElement(p)
 }
 
+function findClosest (el, selector) {
+  while ((el = el.parentElement) && !el.matches(selector));
+  return el
+}
+
 function handleClickEvent(event) {
 	const target = event.target
 	if (!target) {
 		return false
-	} else if (target.tagName == 'A') {
+	}
+	const anchorForTarget = findClosest(target, 'A')
+	if (anchorForTarget) {
 		return false
 	}
 	removeElement(target)
