@@ -7,6 +7,14 @@ console.log = function(message) {
 
 function removeElement(el) {
 	var p = el.parentNode
+	while (el.nextElementSibling instanceof HTMLBRElement) {
+		var nextSibling = el.nextSibling;
+		if (nextSibling instanceof Text) {
+			var text = nextSibling.wholeText.trim()
+			if (text.length) break
+		}
+		p.removeChild(el.nextElementSibling)
+	}
 	p.removeChild(el)
 	tryToRemoveParentElement(p)
 }
