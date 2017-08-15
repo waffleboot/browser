@@ -6,24 +6,29 @@ console.log = function(message) {
 }
 
 function removeElement(el) {
-	if (el === document.body) return
 	var p = el.parentNode
 	p.removeChild(el)
-	var walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null, false)
-	var nodeList = []
-	var hasTextNodes = false
+	tryToRemoveParentElement(p)
+}
+
+function tryToRemoveParentElement(el) {
+	var emptyTextNodes = []
+	var noTextNodesAnymore = true
+	var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false)
 	while (walker.nextNode()) {
 		var text = walker.currentNode.wholeText.trim()
 		if (text.length) {
-			hasTextNodes = true
+			noTextNodesAnymore = false
 		} else {
-			nodeList.push(walker.currentNode)
+			emptyTextNodes.push(walker.currentNode)
 		}
 	}
-	nodeList.forEach(function (c) {
-		c.parentNode.removeChild(c)
+	emptyTextNodes.forEach(function (t) {
+		t.parentNode.removeChild(t)
 	})
-	if (!hasTextNodes) removeElement(p)
+	if (noTextNodesAnymore) {
+		removeElement(el)
+	}
 }
 
 function findClosest (el, selector) {

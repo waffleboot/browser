@@ -47,7 +47,7 @@
 }
 
 - (void)savePageHTML:(NSString *)html withAddress:(NSString *)address {
-    NSLog(@"%@", html);
+//    NSLog(@"%@", html);
     NSURL *url = [NSURL URLWithString:address];
     NSString *oldHtml = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
     if (oldHtml) {
