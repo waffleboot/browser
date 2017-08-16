@@ -101,3 +101,5 @@ addClickEventListener(document)
 // Array.from(document.querySelectorAll('div')).forEach(function (el) {
 // 	addClickEventListener(el)
 // })
+
+window.webkit.messageHandlers.host.postMessage({removeLinks:1})

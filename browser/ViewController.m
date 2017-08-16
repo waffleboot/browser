@@ -7,6 +7,7 @@
 @interface ViewController () <NSTextFieldDelegate,WKUIDelegate,WKScriptMessageHandler,ViewModelDelegate>
 @property (nonatomic) WKWebView *webView;
 @property (nonatomic) IBOutlet NSView *mainView;
+@property (nonatomic) IBOutlet NSButton *linksCheckBox;
 @property (nonatomic) IBOutlet NSTextField *addressTextField;
 @property (nonatomic) IBOutlet NSTextView *sourceTextView;
 @property (nonatomic) IBOutlet NSView *sourceView;
@@ -78,6 +79,14 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     return nil;
 }
 
+- (void)sendRemoveLinksState {
+    NSString *value  = self.linksCheckBox.state == NSOnState ? @"true" : @"false";
+    NSString *script = [NSString stringWithFormat:@"window.removeLinks = %@", value];
+    [self.webView evaluateJavaScript:script completionHandler:^(id result, NSError* error) {
+        // nothing to do
+    }];
+}
+
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
     NSDictionary *dict = (NSDictionary *) message.body;
@@ -86,6 +95,8 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     } else if ([dict valueForKey:@"html"]) {
         [self.viewModel savePageHTML:[dict valueForKey:@"html"] withURL:self.webView.URL];
         self.addressTextField.stringValue = self.webView.URL.browserString;
+    } else if ([dict valueForKey:@"removeLinks"]) {
+        [self sendRemoveLinksState];
     }
 }
 
@@ -115,12 +126,8 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     self.sourceTextView.string = html ? html : @"";
 }
 
-- (IBAction)links:(NSButton *)linksCheckBox {
-    NSString *value  = linksCheckBox.state == NSOnState ? @"true" : @"false";
-    NSString *script = [NSString stringWithFormat:@"window.removeLinks = %@", value];
-    [self.webView evaluateJavaScript:script completionHandler:^(id result, NSError* error) {
-        // nothing to do
-    }];
+- (IBAction)links:(id)sender {
+    [self sendRemoveLinksState];
 }
 
 @end
