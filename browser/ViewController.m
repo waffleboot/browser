@@ -1,6 +1,7 @@
 
 #import "ViewController.h"
 #import "ViewModel.h"
+#import "NSURL+Browser.h"
 @import WebKit;
 
 @interface ViewController () <NSTextFieldDelegate,WKUIDelegate,WKScriptMessageHandler,ViewModelDelegate>
@@ -57,12 +58,12 @@
 }
 
 - (void)openPageWithURL:(NSURL *)url {
-    self.addressTextField.stringValue = url.absoluteString;
+    self.addressTextField.stringValue = url.browserString;
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
 - (void)openPageWithHTML:(NSString *)html baseURL:(NSURL *)baseUrl {
-    self.addressTextField.stringValue = baseUrl.absoluteString;
+    self.addressTextField.stringValue = baseUrl.browserString;
     [self.webView loadHTMLString:html baseURL:baseUrl];
 }
 
@@ -83,7 +84,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     if ([dict valueForKey:@"log"]) {
         NSLog(@"%@", [dict valueForKey:@"log"]);
     } else if ([dict valueForKey:@"html"]) {
-        [self.viewModel savePageHTML:[dict valueForKey:@"html"] withAddress:self.webView.URL.absoluteString];
+        [self.viewModel savePageHTML:[dict valueForKey:@"html"] withURL:self.webView.URL];
     }
 }
 

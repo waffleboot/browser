@@ -6,7 +6,7 @@
 @interface ViewModel : NSObject
 - (instancetype)initWithDelegate:(id<ViewModelDelegate>)delegate;
 - (void)openPageWithAddress:(NSString *)address;
-- (void)savePageHTML:(NSString *)html withAddress:(NSString *)address;
+- (void)savePageHTML:(NSString *)html withURL:(NSURL *)url;
 - (void)reload:(NSString *)address;
 - (void)openRecentAddress;
 - (NSString *)html:(NSString *)address;

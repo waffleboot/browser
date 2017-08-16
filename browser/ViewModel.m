@@ -1,14 +1,11 @@
 
 #import "ViewModel.h"
 #import "BrowserModel.h"
+#import "NSURL+Browser.h"
 
 @interface ViewModel ()
 @property (nonatomic, weak) id<ViewModelDelegate> delegate;
 @property (nonatomic) NSUndoManager *undoManager;
-@end
-
-@interface NSURL (CanonicalURL)
-@property (nonatomic, readonly) NSURL *canonicalURL;
 @end
 
 @implementation ViewModel
@@ -23,16 +20,16 @@
 }
 
 - (void)openPageWithAddress:(NSString *)address {
-    [self openPageWithURL:[NSURL URLWithString:address]];
+    [self openPageWithURL:[NSURL URLWithBrowserString:address]];
 }
 
 - (void)openPageWithURL:(NSURL *)url {
     NSString *recentAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"recentAddress"];
-    NSURL *recentURL = [NSURL URLWithString:recentAddress];
+    NSURL *recentURL = [NSURL URLWithBrowserString:recentAddress];
     if (![recentURL.canonicalURL isEqualTo:url.canonicalURL]) {
+        [[NSUserDefaults standardUserDefaults] setObject:url.browserString forKey:@"recentAddress"];
         [self.undoManager removeAllActions];
     }
-    [[NSUserDefaults standardUserDefaults] setObject:url.absoluteString forKey:@"recentAddress"];
     NSString *html = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
     if (html) {
         [self.delegate openPageWithHTML:html baseURL:url];
@@ -41,25 +38,23 @@
     }
 }
 
-- (void)undoToHtml:(NSString *)html withAddress:(NSString *)address {
-    [self savePageHTML:html withAddress:address];
-    [self openPageWithAddress:address];
+- (void)undoToHtml:(NSString *)html withURL:(NSURL *)url {
+    [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
+    [self openPageWithURL:url];
 }
 
-- (void)savePageHTML:(NSString *)html withAddress:(NSString *)address {
-//    NSLog(@"%@", html);
-    NSURL *url = [NSURL URLWithString:address];
+- (void)savePageHTML:(NSString *)html withURL:(NSURL *)url {
     NSString *oldHtml = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
     if (oldHtml) {
         ViewModel *vm = [self.undoManager prepareWithInvocationTarget:self];
-        [vm undoToHtml:oldHtml withAddress:address];
+        [vm undoToHtml:oldHtml withURL:url.canonicalURL];
     }
     [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
 }
 
 - (void)openRecentAddress {
     NSString *recentAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"recentAddress"];
-    NSURL *recentURL = [NSURL URLWithString:recentAddress];
+    NSURL *recentURL = [NSURL URLWithBrowserString:recentAddress];
     if (recentURL) {
         [self openPageWithURL:recentURL];
     }
@@ -67,7 +62,6 @@
 
 - (void)undo {
     [self.undoManager undo];
-    
 }
 
 - (void)reload:(NSString *)address {
@@ -81,13 +75,3 @@
 
 @end
 
-@implementation NSURL (CanonicalNSURL)
-- (NSURL *)canonicalURL {
-    NSURLComponents *components = [[NSURLComponents alloc] init];
-    components.scheme = self.scheme;
-    components.host = self.host;
-    components.port = self.port;
-    components.path = self.path;
-    return components.URL;
-}
-@end
