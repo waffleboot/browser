@@ -73,7 +73,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
         windowFeatures:(WKWindowFeatures *)windowFeatures {
     // а вот здесь нужно проверять, есть ли
     NSURLRequest *request = navigationAction.request;
-    self.addressTextField.stringValue = request.URL.absoluteString;
+    self.addressTextField.stringValue = request.URL.browserString;
     [self.webView loadRequest:request];
     return nil;
 }
@@ -85,6 +85,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
         NSLog(@"%@", [dict valueForKey:@"log"]);
     } else if ([dict valueForKey:@"html"]) {
         [self.viewModel savePageHTML:[dict valueForKey:@"html"] withURL:self.webView.URL];
+        self.addressTextField.stringValue = self.webView.URL.browserString;
     }
 }
 

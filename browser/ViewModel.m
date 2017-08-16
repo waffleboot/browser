@@ -49,6 +49,7 @@
         ViewModel *vm = [self.undoManager prepareWithInvocationTarget:self];
         [vm undoToHtml:oldHtml withURL:url.canonicalURL];
     }
+    [[NSUserDefaults standardUserDefaults] setObject:url.browserString forKey:@"recentAddress"];
     [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
 }
 
