@@ -53,7 +53,7 @@ function handleClickEvent(event) {
 	if (anchorForTarget && !removeLinks) {
 		return false
 	}
-	removeElement(target)
+	removeElement(target.parentNode)
 	window.webkit.messageHandlers.host.postMessage({html:document.documentElement.outerHTML.toString()})
 	return true
 }
