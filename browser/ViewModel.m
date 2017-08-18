@@ -32,7 +32,7 @@
     }
     NSString *html = [[BrowserModel sharedModel] getHtmlByURL:url];
     if (html) {
-        [self.delegate openPageWithHTML:html baseURL:url];
+        [self.delegate openPageWithHTML:html baseURL:url.canonicalURL];
     } else {
         [self.delegate openPageWithURL:url];
     }

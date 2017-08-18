@@ -37,8 +37,8 @@ function findClosest (el, selector) {
   return el
 }
 
-function isElementValidToRemove(el) {
-	var validElements = [
+function isBlockElement(el) {
+	var blockElements = [
 		HTMLButtonElement,
 		HTMLDivElement,
 		HTMLHeadingElement,
@@ -52,14 +52,13 @@ function isElementValidToRemove(el) {
 		HTMLPreElement,
 		HTMLLIElement
 	]
-	for (var i in validElements) {
-		if (el instanceof validElements[i]) {
-			return true
-		}
-	}
-	if (el instanceof HTMLSpanElement && el.className == 'yangand') {
-		return true
-	}
+	for (var i = 0; i < blockElements.length; ++i) if (el instanceof blockElements[i]) return true
+	return false
+}
+
+function isElementValidToRemove(el) {
+	if (isBlockElement(el)) return true
+	if (el instanceof HTMLSpanElement && el.className == 'yangand') return true
 	return false
 }
 
@@ -110,13 +109,8 @@ function wrapSpanTextNodes() {
 		return n.wholeText.trim().length ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
 	}}, false)
 	while (walker.nextNode()) {
-		if (walker.currentNode.nextSibling instanceof HTMLBRElement) {
-			textNodes.push(walker.currentNode)
-		} else if (walker.currentNode.nextSibling instanceof HTMLDivElement) {
-			textNodes.push(walker.currentNode)
-		} else if (walker.currentNode.previousSibling instanceof HTMLBRElement) {
-			textNodes.push(walker.currentNode)
-		} else if (walker.currentNode.previousSibling instanceof HTMLDivElement) {
+		if (walker.currentNode.nextSibling instanceof HTMLBRElement || isBlockElement(walker.currentNode.nextSibling) 
+		 || walker.currentNode.previousSibling instanceof HTMLBRElement || isBlockElement(walker.currentNode.previousSibling)) {
 			textNodes.push(walker.currentNode)
 		}
 	}
