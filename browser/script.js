@@ -87,12 +87,18 @@ function clear() {
 		})
 	}
 	function removeAllMetaTags() {
-		Array.from(document.querySelectorAll('meta')).forEach(function (el) {
+		document.querySelectorAll('meta').forEach(function (el) {
+			el.parentNode.removeChild(el)
+		})
+	}
+	function removeIFrames() {
+		document.querySelectorAll('iframe').forEach(function(el){
 			el.parentNode.removeChild(el)
 		})
 	}
 	removeAllScriptElements()
 	removeAllMetaTags()
+	removeIFrames()
 }
 
 document.addEventListener('click',function (event) {
@@ -121,10 +127,7 @@ function wrapSpanTextNodes() {
 		span.appendChild(newTextNode)
 		n.parentNode.replaceChild(span, n)
 	})
-	// if (textNodes.length) {
-	// 	console.log(document.body.outerHTML.toString())
-	// }
 }
 
 wrapSpanTextNodes()
-clear()
+setTimeout(clear,3000)
