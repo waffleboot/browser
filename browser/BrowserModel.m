@@ -1,6 +1,7 @@
 
 #import "BrowserModel.h"
 #import "HTML+CoreDataProperties.h"
+#import "NSURL+Browser.h"
 @import CoreData;
 
 @interface BrowserModel ()
@@ -29,7 +30,7 @@
 - (HTML *)getHtmlObjByURL:(NSURL *)url {
     NSError *error;
     NSFetchRequest *fetchRequest = [HTML fetchRequest];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", url.absoluteString];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"address == %@", url.canonicalURL.relativeString];
     NSArray<HTML *> *array = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     return array.firstObject;
 }
@@ -45,11 +46,22 @@
     } else {
         HTML *obj = [[HTML alloc] initWithContext:self.managedObjectContext];
         obj.html = html;
-        obj.address = url.absoluteString;
+        obj.address = url.canonicalURL.relativeString;
     }
     NSError *error;
     if (![self.managedObjectContext save:&error]) {
         NSLog(@"%@", error);
+    }
+}
+
+- (void)deleteHTML:(NSURL *)url {
+    HTML *obj = [self getHtmlObjByURL:url];
+    if (obj) {
+        NSError *error;
+        [self.managedObjectContext deleteObject:obj];
+        if (![self.managedObjectContext save:&error]) {
+            NSLog(@"%@", error);
+        }
     }
 }
 

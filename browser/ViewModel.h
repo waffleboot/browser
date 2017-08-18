@@ -5,11 +5,11 @@
 
 @interface ViewModel : NSObject
 - (instancetype)initWithDelegate:(id<ViewModelDelegate>)delegate;
-- (void)openPageWithAddress:(NSString *)address;
+- (void)openPageWithURL:(NSURL *)url;
 - (void)savePageHTML:(NSString *)html withURL:(NSURL *)url;
-- (void)reload:(NSString *)address;
+- (void)reload:(NSURL *)url;
 - (void)openRecentAddress;
-- (NSString *)html:(NSString *)address;
+- (NSString *)html:(NSURL *)url;
 - (void)undo;
 @end
 

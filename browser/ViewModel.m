@@ -19,9 +19,9 @@
     return self;
 }
 
-- (void)openPageWithAddress:(NSString *)address {
-    [self openPageWithURL:[NSURL URLWithBrowserString:address]];
-}
+//- (void)openPageWithAddress:(NSString *)address {
+//    [self openPageWithURL:[NSURL URLWithBrowserString:address]];
+//}
 
 - (void)openPageWithURL:(NSURL *)url {
     NSString *recentAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"recentAddress"];
@@ -30,7 +30,7 @@
         [[NSUserDefaults standardUserDefaults] setObject:url.browserString forKey:@"recentAddress"];
         [self.undoManager removeAllActions];
     }
-    NSString *html = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
+    NSString *html = [[BrowserModel sharedModel] getHtmlByURL:url];
     if (html) {
         [self.delegate openPageWithHTML:html baseURL:url];
     } else {
@@ -39,18 +39,18 @@
 }
 
 - (void)undoToHtml:(NSString *)html withURL:(NSURL *)url {
-    [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
+    [[BrowserModel sharedModel] saveHTML:html forURL:url];
     [self openPageWithURL:url];
 }
 
 - (void)savePageHTML:(NSString *)html withURL:(NSURL *)url {
-    NSString *oldHtml = [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
+    NSString *oldHtml = [[BrowserModel sharedModel] getHtmlByURL:url];
     if (oldHtml) {
         ViewModel *vm = [self.undoManager prepareWithInvocationTarget:self];
-        [vm undoToHtml:oldHtml withURL:url.canonicalURL];
+        [vm undoToHtml:oldHtml withURL:url];
     }
     [[NSUserDefaults standardUserDefaults] setObject:url.browserString forKey:@"recentAddress"];
-    [[BrowserModel sharedModel] saveHTML:html forURL:url.canonicalURL];
+    [[BrowserModel sharedModel] saveHTML:html forURL:url];
 }
 
 - (void)openRecentAddress {
@@ -65,13 +65,13 @@
     [self.undoManager undo];
 }
 
-- (void)reload:(NSString *)address {
-    [self.delegate openPageWithURL:[NSURL URLWithString:address]];
+- (void)reload:(NSURL *)url {
+    [[BrowserModel sharedModel] deleteHTML:url];
+    [self openPageWithURL:url];
 }
 
-- (NSString *)html:(NSString *)address {
-    NSURL *url = [NSURL URLWithString:address];
-    return [[BrowserModel sharedModel] getHtmlByURL:url.canonicalURL];
+- (NSString *)html:(NSURL *)url {
+    return [[BrowserModel sharedModel] getHtmlByURL:url];
 }
 
 @end

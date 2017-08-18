@@ -5,4 +5,5 @@
 + (instancetype)sharedModel;
 - (NSString *)getHtmlByURL:(NSURL *)url;
 - (void)saveHTML:(NSString *)html forURL:(NSURL *)url;
+- (void)deleteHTML:(NSURL *)url;
 @end

@@ -5,47 +5,66 @@ console.log = function(message) {
     window.webkit.messageHandlers.host.postMessage({log:message})
 }
 
-function removeElement(el) {
-	var p = el.parentNode
-	while (el.nextElementSibling instanceof HTMLBRElement) {
-		var nextSibling = el.nextSibling;
-		if (nextSibling instanceof Text) {
-			var text = nextSibling.wholeText.trim()
-			if (text.length) break
-		}
-		p.removeChild(el.nextElementSibling)
-	}
-	p.removeChild(el)
-	tryToRemoveParentElement(p)
-}
-
-function tryToRemoveParentElement(el) {
-	var emptyTextNodes = []
-	var noTextNodesAnymore = true
+function hasTextNodes(el) {
 	var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false)
 	while (walker.nextNode()) {
 		var text = walker.currentNode.wholeText.trim()
 		if (text.length) {
-			noTextNodesAnymore = false
-		} else {
-			emptyTextNodes.push(walker.currentNode)
+			return true
 		}
 	}
-	emptyTextNodes.forEach(function (t) {
-		t.parentNode.removeChild(t)
+	return false
+}
+
+function removeElement(el) {
+	var elements = [el]
+	var parent = el.parentNode
+	while (el.nextElementSibling instanceof HTMLBRElement) {
+		elements.push(el.nextElementSibling)
+		el = el.nextElementSibling
+	}
+	elements.forEach(function(c){
+		parent.removeChild(c)
 	})
-	if (noTextNodesAnymore) {
-		removeElement(el)
+	if (!hasTextNodes(parent)) {
+		removeElement(parent)
 	}
 }
 
 function findClosest (el, selector) {
+  if (el.matches(selector)) return el
   while ((el = el.parentElement) && !el.matches(selector));
   return el
 }
 
+function isElementValidToRemove(el) {
+	var validElements = [
+		HTMLButtonElement,
+		HTMLDivElement,
+		HTMLHeadingElement,
+		HTMLHRElement,
+		HTMLImageElement,
+		HTMLParagraphElement,
+		HTMLSelectElement,
+		HTMLTableElement,
+		HTMLTextAreaElement,
+		HTMLVideoElement,
+		HTMLPreElement,
+		HTMLLIElement
+	]
+	for (var i in validElements) {
+		if (el instanceof validElements[i]) {
+			return true
+		}
+	}
+	if (el instanceof HTMLSpanElement && el.className == 'yangand') {
+		return true
+	}
+	return false
+}
+
 function handleClickEvent(event) {
-	const target = event.target
+	var target = event.target
 	if (!target) {
 		return false
 	}
@@ -53,53 +72,65 @@ function handleClickEvent(event) {
 	if (anchorForTarget && !removeLinks) {
 		return false
 	}
-	removeElement(target.parentNode)
+	while (!isElementValidToRemove(target)) {
+		target = target.parentElement
+	}
+	removeElement(target)
 	window.webkit.messageHandlers.host.postMessage({html:document.documentElement.outerHTML.toString()})
+	console.log(document.body.outerHTML.toString())
 	return true
 }
 
-// удалить все скрипты
-Array.from(document.scripts).forEach(function (s) {
-	s.parentNode.removeChild(s)
-})
-
-// удалить meta
-Array.from(document.querySelectorAll('meta')).forEach(function (el) {
-	el.parentNode.removeChild(el)
-})
-
-// обернуть все тексты в span
-function allTextNodes() {
-	var nodeList = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT,null,false)
-	while (walker.nextNode()) nodeList.push(walker.currentNode)
-  	return nodeList;
-}
-
-allTextNodes().forEach(function (el) {
-	var text = el.wholeText.trim()
-	if (text.length) {
-		if (el.parentNode.tagName != 'SPAN') {
-			var span = document.createElement('SPAN')
-			el.parentNode.replaceChild(span, el)
-			span.appendChild(document.createTextNode(text))
-		}
-	} else {
-		el.parentNode.removeChild(el)
+function clear() {
+	function removeAllScriptElements() {
+		Array.from(document.scripts).forEach(function (s) {
+			s.parentNode.removeChild(s)
+		})
 	}
-})
-
-// добавить click handler
-function addClickEventListener(el) {
-	el.addEventListener('click', function(event) {
-		if (handleClickEvent(event)) {
-			event.preventDefault()
-		}
-	}, false)	
+	function removeAllMetaTags() {
+		Array.from(document.querySelectorAll('meta')).forEach(function (el) {
+			el.parentNode.removeChild(el)
+		})
+	}
+	removeAllScriptElements()
+	removeAllMetaTags()
 }
 
-addClickEventListener(document)
-// Array.from(document.querySelectorAll('div')).forEach(function (el) {
-// 	addClickEventListener(el)
-// })
+document.addEventListener('click',function (event) {
+	if (handleClickEvent(event)) {
+		event.preventDefault()
+	}
+},false)
 
 window.webkit.messageHandlers.host.postMessage({removeLinks:1})
+
+function wrapSpanTextNodes() {
+	var textNodes = []
+	var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function (n) {
+		return n.wholeText.trim().length ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+	}}, false)
+	while (walker.nextNode()) {
+		if (walker.currentNode.nextSibling instanceof HTMLBRElement) {
+			textNodes.push(walker.currentNode)
+		} else if (walker.currentNode.nextSibling instanceof HTMLDivElement) {
+			textNodes.push(walker.currentNode)
+		} else if (walker.currentNode.previousSibling instanceof HTMLDivElement) {
+			textNodes.push(walker.currentNode)
+		} else if (walker.currentNode.previousSibling instanceof HTMLDivElement) {
+			textNodes.push(walker.currentNode)
+		}
+	}
+	textNodes.forEach(function(n){
+		var span = document.createElement('SPAN')
+		var newTextNode = document.createTextNode(n.wholeText)
+		span.className = 'yangand'
+		span.appendChild(newTextNode)
+		n.parentNode.replaceChild(span, n)
+	})
+	if (textNodes.length) {
+		console.log(document.body.outerHTML.toString())
+	}
+}
+
+wrapSpanTextNodes()
+clear()

@@ -52,7 +52,8 @@
 - (BOOL)control:(NSControl *)control
        textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     if (commandSelector == @selector(insertNewline:)) {
-        [self.viewModel openPageWithAddress:textView.string];
+        NSURL *url = [NSURL URLWithBrowserString:textView.string];
+        [self.viewModel openPageWithURL:url];
         return true;
     }
     return false;
@@ -60,6 +61,10 @@
 
 - (void)openPageWithURL:(NSURL *)url {
     self.addressTextField.stringValue = url.browserString;
+//    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url
+//                                                  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
+//                                              timeoutInterval:10];
+//    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
     [self.webView loadRequest:[NSURLRequest requestWithURL:url]];
 }
 
@@ -87,11 +92,33 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     }];
 }
 
+static const unsigned logSize = 1023;
+
+- (void)logLongText:(NSString *)text {
+    NSInteger parts = text.length / logSize;
+    for (int i = 0; i < parts; ++i) {
+        NSRange range = NSMakeRange(i * logSize, logSize);
+        NSString *part = [text substringWithRange:[text rangeOfComposedCharacterSequencesForRange:range]];
+        NSLog(@"\n%@\n", part);
+    }
+    NSInteger remain = text.length - parts * logSize;
+    if (remain) {
+        NSRange range = NSMakeRange(parts * logSize, remain);
+        NSString *part = [text substringWithRange:[text rangeOfComposedCharacterSequencesForRange:range]];
+        NSLog(@"\n%@\n", part);
+    }
+}
+
 - (void)userContentController:(WKUserContentController *)userContentController
       didReceiveScriptMessage:(WKScriptMessage *)message {
     NSDictionary *dict = (NSDictionary *) message.body;
     if ([dict valueForKey:@"log"]) {
-        NSLog(@"%@", [dict valueForKey:@"log"]);
+        NSString *loggedText = [dict valueForKey:@"log"];
+        if (loggedText.length > logSize) {
+            [self logLongText:loggedText];
+        } else {
+            NSLog(@"%@", loggedText);
+        }
     } else if ([dict valueForKey:@"html"]) {
         [self.viewModel savePageHTML:[dict valueForKey:@"html"] withURL:self.webView.URL];
         self.addressTextField.stringValue = self.webView.URL.browserString;
@@ -105,13 +132,13 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
 }
 
 - (IBAction)reload:(id)sender {
-    [self.viewModel reload:self.webView.URL.absoluteString];
+    [self.viewModel reload:self.webView.URL];
 }
 
 - (IBAction)back:(id)sender {
     WKBackForwardListItem *back = self.webView.backForwardList.backItem;
     if (back) {
-        [self.viewModel openPageWithAddress:back.URL.absoluteString];
+        [self.viewModel openPageWithURL:back.URL];
     }
 }
 
@@ -122,7 +149,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     BOOL webViewHidden = self.webView.hidden;
     self.webView.hidden = !webViewHidden;
     self.sourceView.hidden = webViewHidden;
-    NSString *html = [self.viewModel html:self.addressTextField.stringValue];
+    NSString *html = [self.viewModel html:self.webView.URL];
     self.sourceTextView.string = html ? html : @"";
 }
 
