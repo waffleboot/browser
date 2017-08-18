@@ -50,16 +50,21 @@ function isBlockElement(el) {
 		HTMLTextAreaElement,
 		HTMLVideoElement,
 		HTMLPreElement,
-		HTMLLIElement
+		HTMLLIElement,
+		HTMLUListElement,
+		HTMLDListElement,
+		HTMLOListElement
 	]
 	for (var i = 0; i < blockElements.length; ++i) if (el instanceof blockElements[i]) return true
 	return false
 }
 
+function isMyElement(el) {
+	return el instanceof HTMLDivElement && el.className == 'yangand'
+}
+
 function isElementValidToRemove(el) {
-	if (isBlockElement(el)) return true
-	if (el instanceof HTMLSpanElement && el.className == 'yangand') return true
-	return false
+	return isBlockElement(el) || isMyElement(el) || (el instanceof HTMLElement && el.tagName == 'HEADER')
 }
 
 function handleClickEvent(event) {
@@ -109,25 +114,55 @@ document.addEventListener('click',function (event) {
 
 window.webkit.messageHandlers.host.postMessage({removeLinks:1})
 
-function wrapSpanTextNodes() {
-	var textNodes = []
-	var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: function (n) {
-		return n.wholeText.trim().length ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
-	}}, false)
-	while (walker.nextNode()) {
-		if (walker.currentNode.nextSibling instanceof HTMLBRElement || isBlockElement(walker.currentNode.nextSibling) 
-		 || walker.currentNode.previousSibling instanceof HTMLBRElement || isBlockElement(walker.currentNode.previousSibling)) {
-			textNodes.push(walker.currentNode)
-		}
+function findBefore(el) {
+	var top = el
+	while (!(el instanceof HTMLBRElement)) {
+		top = el; el = el.previousSibling	
 	}
-	textNodes.forEach(function(n){
-		var span = document.createElement('SPAN')
-		var newTextNode = document.createTextNode(n.wholeText)
-		span.className = 'yangand'
-		span.appendChild(newTextNode)
-		n.parentNode.replaceChild(span, n)
+	return top
+}
+
+function createMyElement(nodes) {
+	var div = document.createElement('div')
+	div.className = 'yangand'
+	nodes.forEach(function(el){
+		div.appendChild(el)
+	})
+	return div
+}
+
+function wrapTextNodes() {
+	var set = new Set()
+	document.querySelectorAll('BR').forEach(function(br){
+		if (!isMyElement(br.parentNode)) set.add(br.parentNode)
+	})
+	set.forEach(function(p){
+		var nodes = []
+		var element = p.firstChild
+		var breakLine = false
+		var elements = []
+		while (element) {
+			if (breakLine) {
+				var skip = element instanceof HTMLBRElement || element instanceof Text && !element.wholeText.trim().length
+				if (!skip) {
+					elements.push(createMyElement(nodes))
+					breakLine = false
+					nodes = []
+				}
+			} else {
+				breakLine = element instanceof HTMLBRElement
+			}
+			nodes.push(element)
+			element = element.nextSibling
+		}
+		elements.push(createMyElement(nodes))
+		
+		elements.forEach(function(el){
+			p.appendChild(el)
+		})
 	})
 }
 
-wrapSpanTextNodes()
+wrapTextNodes()
+
 setTimeout(clear,3000)
