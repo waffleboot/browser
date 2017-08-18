@@ -77,7 +77,7 @@ function handleClickEvent(event) {
 	}
 	removeElement(target)
 	window.webkit.messageHandlers.host.postMessage({html:document.documentElement.outerHTML.toString()})
-	console.log(document.body.outerHTML.toString())
+	// console.log(document.body.outerHTML.toString())
 	return true
 }
 
@@ -114,7 +114,7 @@ function wrapSpanTextNodes() {
 			textNodes.push(walker.currentNode)
 		} else if (walker.currentNode.nextSibling instanceof HTMLDivElement) {
 			textNodes.push(walker.currentNode)
-		} else if (walker.currentNode.previousSibling instanceof HTMLDivElement) {
+		} else if (walker.currentNode.previousSibling instanceof HTMLBRElement) {
 			textNodes.push(walker.currentNode)
 		} else if (walker.currentNode.previousSibling instanceof HTMLDivElement) {
 			textNodes.push(walker.currentNode)
@@ -127,9 +127,9 @@ function wrapSpanTextNodes() {
 		span.appendChild(newTextNode)
 		n.parentNode.replaceChild(span, n)
 	})
-	if (textNodes.length) {
-		console.log(document.body.outerHTML.toString())
-	}
+	// if (textNodes.length) {
+	// 	console.log(document.body.outerHTML.toString())
+	// }
 }
 
 wrapSpanTextNodes()
